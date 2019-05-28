@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-%matplotlib inline
 import warnings # Ignores any warning    
 
 def fat_to_numeric(x):
@@ -61,7 +60,7 @@ def loc_type_to_numeric(x):
     if (x=='Tier 3'):
         return 2
 
-def type_to_numeric(x):
+def outlet_type_to_numeric(x):
     if (x=='Supermarket Type1'):
         return 0
     if (x=='Supermarket Type2'):
@@ -82,16 +81,20 @@ def proc_data(path):
     
     df['Outlet_Location_Type_n'] = df['Outlet_Location_Type'].apply(loc_type_to_numeric)
     
-    df['Outlet_Type_n'] = df['Outlet_Type'].apply(type_to_numeric)
-    
-    df['Outlet_Location_Type_n'] = df['Outlet_Location_Type'].apply(loc_type_to_numeric) 
+
     
     for index, row in df.iterrows():
-    if (row['Outlet_Size_n']== 3):
-        if (row['Outlet_Type'] == 'Grocery Store') or (row['Outlet_Type'] == 'Supermarket Type1'):
-            df.at[index, 'Outlet_Size'] = 'Small'
-        if (row['Outlet_Type'] == 'Supermarket Type2') or (row['Outlet_Type'] == 'Supermarket Type3'):
-            df.at[index, 'Outlet_Size'] = 'Medium'
+        if (row['Outlet_Size_n']== 3):
+            if (row['Outlet_Type'] == 'Grocery Store') or (row['Outlet_Type'] == 'Supermarket Type1'):
+                df.at[index, 'Outlet_Size'] = 'Small'
+            if (row['Outlet_Type'] == 'Supermarket Type2') or (row['Outlet_Type'] == 'Supermarket Type3'):
+                df.at[index, 'Outlet_Size'] = 'Medium'
+    
+    df['Outlet_Type_n'] = df['Outlet_Type'].apply(outlet_type_to_numeric)
+    
+    del df['Item_Type'], df['Item_Fat_Content'], df['Outlet_Size'], df['Outlet_Location_Type'], df['Outlet_Type']
+    
+    return df
 
     
     
